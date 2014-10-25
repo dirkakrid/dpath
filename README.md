@@ -28,4 +28,5 @@ from dpath import get, update
 get('object.name', nested)
 get('object.events[0].type', nested)
 update('object.repos', nested, lambda x: x.append('repo4'))
+replace('object.type', nested, 'Admin')
 ```
