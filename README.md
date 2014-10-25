@@ -22,7 +22,7 @@ nested = {
 One can perform the following queries and operations
 against the data:
 
-```
+```python
 from dpath import get, update
 
 get('object.name', nested)
