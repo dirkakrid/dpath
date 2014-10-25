@@ -1,1 +1,1 @@
-from dpath.query import get, update
+from dpath.query import get, update, replace

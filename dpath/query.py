@@ -12,3 +12,11 @@ def update(query, data, callback):
         data = data[index]
     callback(data)
     return data
+
+
+def replace(query, data, value):
+    idxs = list(indexes(query))
+    for idx in idxs[:-1]:
+        data = data[idx]
+    data[idxs[-1]] = value
+    return value
