@@ -1,0 +1,20 @@
+from re import search
+
+
+def get_index(item):
+    while '[' in item:
+        match = search(r'\[(\d+)\]+', item)
+        if not match:
+            break
+        start, end = match.span()
+
+
+def tokenise(text):
+    for item in text.split('.'):
+        if '[' in item:
+            prefix, _, _ = item.partition('[')
+            yield prefix
+            for idx in get_indexes(item):
+                yield idx
+            continue
+        yield item
