@@ -62,6 +62,8 @@ def radify(tokens):
 
 
 def compile_selector(query):
+    if isinstance(query, list):
+        return query
     path, _ = scanner.scan(query)
     path = deque(path)
     return list(radify(path))
