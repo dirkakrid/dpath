@@ -13,8 +13,29 @@ scanner = Scanner([
 ])
 
 
+class LinkedScope(object):
+    def __init__(self):
+        self.stack = [[]]
+
+    @property
+    def top(self):
+        return self.stack[-1]
+
+    def push(self):
+        top = []
+        self.stack[-1].append(top)
+        self.stack.append(top)
+        return top
+
+    def pop(self):
+        self.stack.pop()
+
+    def reduce_all(self):
+        self.stack = [self.stack[0]]
+
+
 def radify(tokens):
-    stack = [[]]
+    stack = LinkedScope()
     modes = [str]
     while tokens:
         name, text = tokens.popleft()
@@ -25,24 +46,19 @@ def radify(tokens):
             modes.pop()
 
         elif name == 'BEGIN-BRACE':
-            root = [[]]
-            stack[-1].append(root)
-            stack.append(root)
-            stack.append(root[0])
+            stack.push()  # one for all patterns
+            stack.push()  # one for the current pattern
 
         elif name == 'SEP':
-            stack.pop()
-            root = stack[-1]
-            this = []
-            root.append(this)
-            stack.append(this)
+            stack.pop()   # pop the current pattern
+            stack.push()  # push another pattern
 
         elif name == 'END-BRACE':
-            stack = stack[:1]
+            stack.reduce_all()
 
         elif name =='KEY':
-            stack[-1].append(modes[-1](text))
-    return stack[0]
+            stack.top.append(modes[-1](text))
+    return stack.top
 
 
 def compile_selector(query):
