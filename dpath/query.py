@@ -1,4 +1,4 @@
-from dpath.path import compile_selector
+from dpath.path import tokenise
 
 
 def recurse(indexes, rc):
@@ -14,12 +14,16 @@ def recurse(indexes, rc):
     return rc
 
 
+def compile_selector(path):
+    if isinstance(path, list):
+        return path
+    return list(tokenise(path))
+
+
 def get(path, data):
-    path = compile_selector(path)
-    return recurse(path, [data])
+    return recurse(compile_selector(path), [data])
 
 
 def update(path, data, callback):
-    path = compile_selector(path)
-    for item in recurse(path, [data]):
+    for item in recurse(compile_selector(path), [data]):
         callback(item)
