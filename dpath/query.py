@@ -1,22 +1,26 @@
-from dpath.path import indexes
+from dpath.path import compile_selector
 
 
-def get(query, data):
-    for index in indexes(query):
-        data = data[index]
-    return data
+def recurse(indexes, rc):
+    for idx in indexes:
+        stack = []
+        for datum in rc:
+            if isinstance(idx, list):
+                for index in idx:
+                    process = recurse((index,), rc=(datum,))
+                    stack.extend(process)
+                continue
+            stack.append(datum[idx])
+        rc[:] = stack
+    return rc
 
 
-def update(query, data, callback):
-    for index in indexes(query):
-        data = data[index]
-    callback(data)
-    return data
+def get(path, data):
+    path = compile_selector(path)
+    return recurse(path, [data])
 
 
-def replace(query, data, value):
-    idxs = list(indexes(query))
-    for idx in idxs[:-1]:
-        data = data[idx]
-    data[idxs[-1]] = value
-    return value
+def update(path, data, callback):
+    path = compile_selector(path)
+    for item in recurse(path, [data]):
+        callback(item)
