@@ -1,9 +1,9 @@
 dpath
 =====
 
-Simple library for querying/updating nested dictionaries
-with a very simple selector syntax instead of hardcoding
-the paths. For example, given the data:
+Simple library for querying nested dictionaries with a
+very simple selector syntax instead of hardcoding the
+paths. For example, given the data:
 
 ```python
 nested = {
@@ -19,8 +19,7 @@ nested = {
 }
 ```
 
-One can perform the following queries and operations
-against the data:
+You can perform the following queries against the data:
 
 ```python
 from dpath import get, update
@@ -28,5 +27,5 @@ from dpath import get, update
 get('object.name', nested)
 get('object.events[0].type', nested)
 get('object.(name,type)', nested)
-update('object.repos', nested, lambda x: x.append('repo4'))
+get('object.(events[0],name)')
 ```

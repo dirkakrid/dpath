@@ -22,8 +22,3 @@ def compile_selector(path):
 
 def get(path, data):
     return recurse(compile_selector(path), [data])
-
-
-def update(path, data, callback):
-    for item in recurse(compile_selector(path), [data]):
-        callback(item)

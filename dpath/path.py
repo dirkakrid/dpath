@@ -34,14 +34,14 @@ class LinkedScope(object):
 
 
 def radify(tokens):
+    mode = str
     stack = LinkedScope()
-    modes = [str]
     for name, text in tokens:
         if name == 'BEGIN-NUM':
-            modes.append(int)
+            mode = int
 
         elif name == 'END-NUM':
-            modes.pop()
+            mode = str
 
         elif name == 'BEGIN-BRACE':
             stack.push()  # one for all patterns
@@ -55,7 +55,7 @@ def radify(tokens):
             stack.reduce_all()
 
         elif name =='KEY':
-            stack.top.append(modes[-1](text))
+            stack.top.append(mode(text))
     return stack.top
 
 
