@@ -1,36 +1,51 @@
-from collections import deque, namedtuple
+from collections import deque
 from re import Scanner
 
 
-Token = namedtuple('Token', ('name', 'text'))
 scanner = Scanner([
-    (r'\(',    lambda sc, token: Token('BEGIN-BRACE', token)),
-    (r'\)',    lambda sc, token: Token('END-BRACE', token)),
-    (r'\[',    lambda sc, token: Token('BEGIN-NUM', token)),
-    (r'\]',    lambda sc, token: Token('END-NUM', token)),
-    (r'(\w+)', lambda sc, token: Token('KEY', token)),
-    (r'[.,]',  lambda sc, token: None),
+    (r'\(',     lambda sc, token: ('BEGIN-BRACE', token)),
+    (r'\)',     lambda sc, token: ('END-BRACE', token)),
+    (r'\[',     lambda sc, token: ('BEGIN-NUM', token)),
+    (r'\]',     lambda sc, token: ('END-NUM', token)),
+    (r'\,',     lambda sc, token: ('SEP', token)),
+    (r'\w+',    lambda sc, token: ('KEY', token)),
+    (r'\.',     lambda sc, token: None),
 ])
 
 
-def radify(results, mode=str):
-    while results:
-        token = results.popleft()
-        if token.name == 'END-BRACE':
-            break
-        elif token.name == 'BEGIN-NUM':
-            mode = int
-        elif token.name == 'END-NUM':
-            mode = str
-        elif token.name == 'BEGIN-BRACE':
-            yield list(radify(results, mode))
-        else:
-            yield [mode(token.text)]
+def radify(tokens):
+    stack = [[]]
+    modes = [str]
+    while tokens:
+        name, text = tokens.popleft()
+        if name == 'BEGIN-NUM':
+            modes.append(int)
+
+        elif name == 'END-NUM':
+            modes.pop()
+
+        elif name == 'BEGIN-BRACE':
+            root = [[]]
+            stack[-1].append(root)
+            stack.append(root)
+            stack.append(root[0])
+
+        elif name == 'SEP':
+            stack.pop()
+            root = stack[-1]
+            this = []
+            root.append(this)
+            stack.append(this)
+
+        elif name == 'END-BRACE':
+            stack = stack[:1]
+
+        elif name =='KEY':
+            stack[-1].append(modes[-1](text))
+    return stack[0]
 
 
 def compile_selector(query):
-    if isinstance(query, list):
-        return query
-    results, _ = scanner.scan(query)
-    results = deque(results)
-    return radify(results)
+    path, _ = scanner.scan(query)
+    path = deque(path)
+    return list(radify(path))

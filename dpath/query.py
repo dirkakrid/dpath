@@ -2,16 +2,15 @@ from dpath.path import compile_selector
 
 
 def recurse(indexes, rc):
-    for idx in indexes:
+    for index in indexes:
         stack = []
         for datum in rc:
-            if isinstance(idx, list):
-                for index in idx:
-                    process = recurse((index,), rc=(datum,))
-                    stack.extend(process)
+            if isinstance(index, list):
+                for item in index:
+                    stack.extend(recurse(item, rc=[datum]))
                 continue
-            stack.append(datum[idx])
-        rc[:] = stack
+            stack.append(datum[index])
+        rc = stack
     return rc
 
 
