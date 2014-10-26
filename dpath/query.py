@@ -5,11 +5,11 @@ def recurse(indexes, rc):
     for index in indexes:
         stack = []
         for datum in rc:
-            if isinstance(index, list):
-                for item in index:
-                    stack.extend(recurse(item, rc=[datum]))
+            if isinstance(index, str):
+                stack.append(datum[index])
                 continue
-            stack.append(datum[index])
+            for item in index:
+                stack.extend(recurse(item, rc=[datum]))
         rc = stack
     return rc
 
