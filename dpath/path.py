@@ -1,4 +1,3 @@
-from collections import deque
 from re import Scanner
 
 
@@ -37,8 +36,7 @@ class LinkedScope(object):
 def radify(tokens):
     stack = LinkedScope()
     modes = [str]
-    while tokens:
-        name, text = tokens.popleft()
+    for name, text in tokens:
         if name == 'BEGIN-NUM':
             modes.append(int)
 
@@ -62,8 +60,5 @@ def radify(tokens):
 
 
 def tokenise(query):
-    if isinstance(query, list):
-        return query
     path, _ = scanner.scan(query)
-    path = deque(path)
     return radify(path)
