@@ -2,13 +2,13 @@ from re import Scanner
 
 
 scanner = Scanner([
-    (r'\(',     lambda sc, token: ('BEGIN-BRACE', token)),
-    (r'\)',     lambda sc, token: ('END-BRACE', token)),
-    (r'\[',     lambda sc, token: ('BEGIN-NUM', token)),
-    (r'\]',     lambda sc, token: ('END-NUM', token)),
-    (r'\,',     lambda sc, token: ('SEP', token)),
-    (r'\w+',    lambda sc, token: ('KEY', token)),
-    (r'\.',     lambda sc, token: None),
+    (r'\(',  lambda sc, token: ('BEGIN-BRACE', token)),
+    (r'\)',  lambda sc, token: ('END-BRACE', token)),
+    (r'\[',  lambda sc, token: ('BEGIN-NUM', token)),
+    (r'\]',  lambda sc, token: ('END-NUM', token)),
+    (r'\,',  lambda sc, token: ('SEP', token)),
+    (r'\w+', lambda sc, token: ('KEY', token)),
+    (r'\.',  lambda sc, token: None),
 ])
 
 
