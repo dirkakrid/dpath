@@ -1,4 +1,4 @@
-from dpath.path import tokenise
+from dpath.path import compile_selector
 
 
 def recurse(indexes, rc):
@@ -12,12 +12,6 @@ def recurse(indexes, rc):
                 stack.extend(recurse(item, rc=[datum]))
         rc = stack
     return rc
-
-
-def compile_selector(path):
-    if isinstance(path, list):
-        return path
-    return list(tokenise(path))
 
 
 def get(path, data):

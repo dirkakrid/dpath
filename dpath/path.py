@@ -59,6 +59,8 @@ def radify(tokens):
     return stack.top
 
 
-def tokenise(query):
+def compile_selector(query):
+    if isinstance(query, list):
+        return query
     path, _ = scanner.scan(query)
-    return radify(path)
+    return list(radify(path))
