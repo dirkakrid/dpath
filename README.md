@@ -24,8 +24,8 @@ You can perform the following queries against the data:
 ```python
 from dpath import get, update
 
-get('object.name', nested)
-get('object.events[0].type', nested)
-get('object.(name,type)', nested)
-get('object.(events[0],name)')
+get(nested, 'object.name')
+get(nested, 'object.events[0].type')
+get(nested, 'object.(name,type)')
+get(nested, 'object.(events[0],name)')
 ```

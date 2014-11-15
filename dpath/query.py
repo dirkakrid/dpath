@@ -14,5 +14,5 @@ def recurse(indexes, rc):
     return rc
 
 
-def get(path, data):
+def get(data, path):
     return recurse(compile_selector(path), [data])
